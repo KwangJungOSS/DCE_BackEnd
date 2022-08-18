@@ -22,6 +22,44 @@ def findEncodingInfo(txt):
 async def read_root(request:Request):
     return templates.TemplateResponse("index.html",{"request":request})
 
+#분석 시각화 
+@app.get("/mail",response_class=HTMLResponse)
+async def read_mail(request:Request):
+
+    #임시 json 파일
+    
+    my_json={
+        "SendToYou": {
+            "Rank": [
+                {"name": "sa","value":100},
+                {"name": "sb","value":600},
+                {"name": "sc","value":300},
+                {"name": "sd","value":250},
+                {"name": "se","value":100}]
+        },
+        "Ratio": {
+            "Rank": [
+                {"name": "ra","value":100},
+                {"name": "rb","value":600},
+                {"name": "rc","value":300},
+                {"name": "rd","value":250},
+                {"name": "re","value":100}]
+        },
+        "Topic": {
+            "Rank": [
+                {"name": "ta","value":100},
+                {"name": "tb","value":600},
+                {"name": "tc","value":300},
+                {"name": "td","value":250},
+                {"name": "te","value":100}]
+        },
+        "Delete":["응암정보도서관<ealibsend@ealib.or.kr>","UPPITY<moneyletter@uppity.co.kr>",
+        "Trip.com<kr_hotel@trip.com>"]
+    }
+    context={'request':request,'my_json':my_json}
+
+    return templates.TemplateResponse("mail.html",context=context)
+
 #/test 경로
 @app.post("/test", response_class=PlainTextResponse)
 async def read_test(username: str = Form(), password: str = Form()): #form에서 보낸것을 받아옴.

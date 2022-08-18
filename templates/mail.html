@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>디지털 탄소 배출</title>
+</head>
+<body>
+    <p>
+        <h3>당신에게 메일 많이 보낸사람 TOP 5</h3>
+        {% for rank in my_json.SendToYou.Rank %}
+        {{rank.name}}:{{rank.value}} <br>
+        {% endfor %}
+    </p>
+    <p>
+    <h3>비율</h3>
+        {% for rank in my_json.Ratio.Rank %}
+        {{rank.name}}:{{rank.value}} <br>
+        {% endfor %}
+    </p>
+    <p>
+        <h3>관심있는 주제</h3>
+            {% for rank in my_json.Topic.Rank %}
+            {{rank.name}}:{{rank.value}} <br>
+            {% endfor %}
+        </p>
+    <p>
+        <h3>지워야할 메일</h3>
+        {{my_json.Delete[0]}},
+        {{my_json.Delete[1]}},
+        {{my_json.Delete[2]}}
+    </p>
+</body>
+</html>
