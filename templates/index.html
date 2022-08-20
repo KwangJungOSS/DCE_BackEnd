@@ -5,10 +5,25 @@
     <title>디지털 탄소 배출</title>
 </head>
 <body>
-    <form action="/test" method="post">
+    <form action="/mails/" method="post">
+    <p>
+    <input type="radio" name="platform" value="NAVER" id="rd0" checked="true"><label for="rd0">Naver</label>
+	<input type="radio" name="platform" value="GOOGLE" id="rd1"><label for="rd1">Google</label>
+	<input type="radio" name="platform" value="DAUM" id="rd2"><label for="rd2">Daum</label><br>
+    </p>
+    <p>
     아이디   입력<input type="text" name="username"><br>
     비밀번호 입력<input type="password" name="password"><br> 
+    </p>
+    {% if error == true %}
+    <p>
+       서버 접속 실패. ID, PW를 다시 확인해주세요.
+    </p>
+    {% endif %}
+
+    <p>
     <input type="submit"><br>
-</form>
+    </p>    
+    </form>
 </body>
 </html>
