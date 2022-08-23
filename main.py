@@ -2,9 +2,22 @@ from fastapi import FastAPI,Request,Form
 from fastapi.responses import HTMLResponse,PlainTextResponse
 from fastapi.templating import Jinja2Templates
 from routers import mail
-
+# CORS 문제
+from fastapi.middleware.cors import CORSMiddleware
 
 app=FastAPI()
+
+# react client 주소
+origins = ['http://localhost:3000']
+
+# 모든 origin, 모든 cookie, 모든 method, 모든 header를 allow 한다는 얘기 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=['GET'],
+    allow_headers=['Content-Type','application/xml'],
+)
 
 #/mail 라우터
 app.include_router(mail.router)
@@ -12,10 +25,15 @@ app.include_router(mail.router)
 # html 파일이 있는 폴더 설정
 templates = Jinja2Templates(directory="templates")
 
-# 루트 경로
-@app.get("/",response_class=HTMLResponse)
-async def read_root(request:Request):
-    return templates.TemplateResponse("index.html",{"request":request,"error":False})
+## 루트 경로
+#@app.get("/",response_class=HTMLResponse)
+#async def read_root(request:Request):
+#    return templates.TemplateResponse("index.html",{"request":request,"error":False})
+
+# react app과 연결되었는지 확인하는 Default code.return 값 수정 필요
+@app.get("/")
+async def root():
+    return{"kwang jeong"}
 
 #메일 서버 접속 실패시
 @app.post("/",response_class=HTMLResponse)
