@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 app=FastAPI()
 
 # react client 주소
-origins = ['http://localhost:3000']
+origins = ['https://seo-inyoung.github.io/dce-client/']
 
 # 모든 origin, 모든 cookie, 모든 method, 모든 header를 allow 한다는 얘기 
 app.add_middleware(
