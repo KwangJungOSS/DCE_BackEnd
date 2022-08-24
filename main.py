@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 app=FastAPI()
 
 # react client 주소
-origins = ['http://localhost:3000']
+origins = "https://seo-inyoung.github.io/dce-client/"
 
 # 모든 origin, 모든 cookie, 모든 method, 모든 header를 allow 한다는 얘기 
 app.add_middleware(
@@ -25,15 +25,15 @@ app.include_router(mail.router)
 # html 파일이 있는 폴더 설정
 templates = Jinja2Templates(directory="templates")
 
-## 루트 경로
+# 루트 경로
 #@app.get("/",response_class=HTMLResponse)
 #async def read_root(request:Request):
 #    return templates.TemplateResponse("index.html",{"request":request,"error":False})
 
-# react app과 연결되었는지 확인하는 Default code.return 값 수정 필요
+# 루트 경로
 @app.get("/")
-async def root():
-    return{"kwang jeong"}
+async def root(request:Request):
+    return {"kwang jeong"}
 
 #메일 서버 접속 실패시
 @app.post("/",response_class=HTMLResponse)
