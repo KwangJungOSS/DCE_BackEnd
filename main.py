@@ -31,15 +31,29 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
+# https://stackoverflow.com/questions/70302056/define-a-pydantic-nested-model <- 중첩된 json은 이런식으로 표현하래서 일케함.
+
 class UserIn(BaseModel):
     inputId : str
     inputPassword : str
     # full_name : Union[str, None] = None
 
+class value(BaseModel):
+    name:str
+    count:int
+
 class mailData(BaseModel):
-    status: str
-    data: Optional[dict]=None
+    sender: List[value]
+    ratio: List[value]
+    topic: List[value]
+    delete: List[str]    
     # full_name : Union[str, None] = None
+
+#response analysis 줄임말.
+class responAna(BaseModel):
+    status: str
+    data: Optional[mailData]=None
+ 
 
 IMAPADDRESS={"NAVER":"imap.naver.com","GOOGLE":"www","DAUM":"www"}
 
@@ -53,7 +67,7 @@ templates = Jinja2Templates(directory="templates")
 async def root(request:Request):
     return {"kwang jeong"}
 
-@app.post("/",response_model=mailData)
+@app.post("/",response_model=responAna)
 async def access_mail(item: UserIn):
     #imap 서버 주소 설정.
     imap = imaplib.IMAP4_SSL("imap.naver.com")
@@ -70,30 +84,27 @@ async def access_mail(item: UserIn):
     
     msg={"status":"success",
         "data":{
-            "sender": {
-                "rank": [
-                    {"name": "sa","value":100},
-                    {"name": "sb","value":600},
-                    {"name": "sc","value":300},
-                    {"name": "sd","value":250},
-                    {"name": "se","value":100}]
-            },
-            "ratio": {
-                "rank": [
-                    {"name": "ra","value":100},
-                    {"name": "rb","value":600},
-                    {"name": "rc","value":300},
-                    {"name": "rd","value":250},
-                    {"name": "re","value":100}]
-            },
-            "topic": {
-                "rank": [
-                    {"name": "ta","value":100},
-                    {"name": "tb","value":600},
-                    {"name": "tc","value":300},
-                    {"name": "td","value":250},
-                    {"name": "te","value":100}]
-            },
+            "sender": [
+                    {"name": "링커리어","count":600},
+                    {"name": "하나투어","count":400},
+                    {"name": "한국SW산업협회","count":380},
+                    {"name": "NEWNEEK","count":250},
+                    {"name": "순살브리핑","count":100}]
+            ,
+            "ratio":  [
+                    {"name": "광고","count":100},
+                    {"name": "구독","count":600},
+                    {"name": "A","count":300},
+                    {"name": "B","count":250},
+                    {"name": "C","count":100}]
+            ,
+            "topic":  [
+                    {"name": "취업","count":500},
+                    {"name": "개발","count":300},
+                    {"name": "웹툰","count":200},
+                    {"name": "광운대학교","count":119},
+                    {"name": "유튜브","count":50}]
+            ,
             "delete":["응암정보도서관<ealibsend@ealib.or.kr>","UPPITY<moneyletter@uppity.co.kr>",
             "Trip.com<kr_hotel@trip.com>"]
         }}
