@@ -53,7 +53,7 @@ templates = Jinja2Templates(directory="templates")
 async def root(request:Request):
     return {"kwang jeong"}
 
-@app.post("/")
+@app.post("/",response_model=mailData)
 async def access_mail(item: UserIn):
     #imap 서버 주소 설정.
     imap = imaplib.IMAP4_SSL("imap.naver.com")
