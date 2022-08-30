@@ -1,35 +1,15 @@
-#fastapi
-from fastapi import FastAPI,Request,Form
-from fastapi.responses import HTMLResponse,RedirectResponse
-from fastapi.templating import Jinja2Templates
-
-# CORS 문제
-from fastapi.middleware.cors import CORSMiddleware
-
-#router
-from routers import mail
+from fastapi import APIRouter,Request,Form
+import pandas as pd
+import imaplib
+from enum import Enum
+import email
+from email import policy
 
 #response model, response body
 from pydantic import BaseModel, EmailStr
 from typing import Union,List,Optional
 
-#email
-import imaplib
-import email
-
-app=FastAPI()
-
-# react client 주소
-ORIGIN = "https://seo-inyoung.github.io/dce-client/"
-
-# 모든 origin, 모든 cookie, 모든 method, 모든 header를 allow 한다는 얘기 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=ORIGIN,
-    allow_credentials=True,
-    allow_methods=['*'],
-    allow_headers=['*'],
-)
+router = APIRouter()
 
 # https://stackoverflow.com/questions/70302056/define-a-pydantic-nested-model <- 중첩된 json은 이런식으로 표현하래서 일케함.
 
@@ -55,20 +35,14 @@ class responAna(BaseModel):
     data: Optional[mailData]=None
  
 
-IMAPADDRESS={"NAVER":"imap.naver.com","GOOGLE":"www","DAUM":"www"}
-
-#/mail 라우터
-app.include_router(mail.router)
-
-# html 파일이 있는 폴더 설정
-templates = Jinja2Templates(directory="templates")
-
-@app.get("/")
+ 
+@router.get("/")
 async def root(request:Request):
     return {"kwang jeong"}
 
-@app.post("/",response_model=responAna)
-async def access_mail(item: UserIn):
+
+@router.post("/",response_model=responAna)
+async def access_mail(request:Request, item: UserIn):
     #imap 서버 주소 설정.
     imap = imaplib.IMAP4_SSL("imap.naver.com")
     
@@ -81,7 +55,12 @@ async def access_mail(item: UserIn):
     except imaplib.IMAP4.error as e:
         msg={"status":"fail","data":None}
         return msg
-    
+
+   #로그인 성공 -> Session에 정보 저장
+
+    #request.session["id"]=item.inputId     
+    #print(request.session["id"])
+
     msg={"status":"success",
         "data":{
             "sender": [
