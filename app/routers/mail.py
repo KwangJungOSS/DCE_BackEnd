@@ -7,20 +7,19 @@ from enum import Enum
 import email
 from email import policy
 
-IMAPADDRESS={"NAVER":"imap.naver.com","GOOGLE":"www","DAUM":"www"}
 
-#get_key_from_mail과 세트입니다. 메일을 읽을 때 사용됩니다.
-def findEncodingInfo(txt):    
-    info = email.header.decode_header(txt)
-    s, encoding = info[0]
-    return s, encoding
 
 router = APIRouter(
     prefix="/mails",
     tags=["mails"],
     responses={404: {"description": "Not found"}},
 )
-
+'''
+#get_key_from_mail과 세트입니다. 메일을 읽을 때 사용됩니다.
+def findEncodingInfo(txt):    
+    info = email.header.decode_header(txt)
+    s, encoding = info[0]
+    return s, encoding
 # html 파일이 있는 폴더 설정
 templates = Jinja2Templates(directory="templates")
 
@@ -52,8 +51,6 @@ async def read_test(request:Request, platform:str = Form(), username: str = Form
 
     df = pd.DataFrame(columns={'FROM','TO','DATE','SUBJECT'})
     df=df[['FROM','TO','DATE','SUBJECT']]
-
-    '''
     index = 0
     for num in msg_ids[0].split():
         unseen_mail_info=[]
@@ -73,8 +70,8 @@ async def read_test(request:Request, platform:str = Form(), username: str = Form
     top_=df["FROM"].value_counts(ascending=False)
     top5=top_.head(5).index.tolist()
     print(top5)
-    '''
     context={'request':request}
 
     return templates.TemplateResponse("mid.html",context=context)
     #return {"top5":top5}
+'''
