@@ -8,6 +8,4 @@ Python version : 3.9.13
 ```
   pip install fastapi
   pip install "uvicorn[standard]"
-  pip install jinja2
-  pip install python-multipart
   ```
