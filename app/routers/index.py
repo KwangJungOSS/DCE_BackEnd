@@ -1,4 +1,6 @@
+from curses import keyname
 from fastapi import APIRouter,Request,Form
+from fastapi.responses import JSONResponse
 import pandas as pd
 import imaplib
 from enum import Enum
@@ -31,17 +33,10 @@ class mailData(BaseModel):
 
 #response analysis 줄임말.
 class responAna(BaseModel):
-    status: str
     data: Optional[mailData]=None
- 
-
- 
-@router.get("/")
-async def root(request:Request):
-    return {"kwang jeong"}
 
 
-@router.post("/",response_model=responAna)
+@router.post("/",response_model=responAna, status_code=200)
 async def access_mail(request:Request, item: UserIn):
     #imap 서버 주소 설정.
     imap = imaplib.IMAP4_SSL("imap.naver.com")
@@ -53,16 +48,14 @@ async def access_mail(request:Request, item: UserIn):
     
     #로그인 실패시,
     except imaplib.IMAP4.error as e:
-        msg={"status":"fail","data":None}
-        return msg
+        return JSONResponse(status_code=404, content={"message":"User ID or Password is invalid"})
 
    #로그인 성공 -> Session에 정보 저장
 
     #request.session["id"]=item.inputId     
     #print(request.session["id"])
 
-    msg={"status":"success",
-        "data":{
+    msg={"data":{
             "sender": [
                     {"name": "링커리어","count":600},
                     {"name": "하나투어","count":400},
