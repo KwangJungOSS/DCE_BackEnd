@@ -1,6 +1,8 @@
-from fastapi import APIRouter,Request,Form
+#fast-api session
+from fastapi import APIRouter,Request
 import pandas as pd
 import imaplib
+
 from enum import Enum
 import email
 from email import policy
@@ -8,6 +10,12 @@ from email import policy
 #response model, response body
 from pydantic import BaseModel, EmailStr
 from typing import Union,List,Optional
+
+#json response
+from starlette.responses import JSONResponse
+
+#fast-api session
+
 
 router = APIRouter()
 
@@ -33,15 +41,10 @@ class mailData(BaseModel):
 class responAna(BaseModel):
     status: str
     data: Optional[mailData]=None
- 
-
- 
-@router.get("/")
-async def root(request:Request):
-    return {"kwang jeong"}
 
 
-@router.post("/",response_model=responAna)
+
+@router.post("/",response_model=responAna,status_code=200)
 async def access_mail(request:Request, item: UserIn):
     #imap 서버 주소 설정.
     imap = imaplib.IMAP4_SSL("imap.naver.com")
@@ -53,13 +56,14 @@ async def access_mail(request:Request, item: UserIn):
     
     #로그인 실패시,
     except imaplib.IMAP4.error as e:
-        msg={"status":"fail","data":None}
-        return msg
+        return JSONResponse(status_code=404,content=dict(msg="access-falied"))
 
-   #로그인 성공 -> Session에 정보 저장
+
+    #로그인 성공 -> Session에 정보 저장
 
     #request.session["id"]=item.inputId     
     #print(request.session["id"])
+
 
     msg={"status":"success",
         "data":{
@@ -84,7 +88,7 @@ async def access_mail(request:Request, item: UserIn):
                     {"name": "광운대학교","count":119},
                     {"name": "유튜브","count":50}]
             ,
-            "delete":["응암정보도서관<ealibsend@ealib.or.kr>","UPPITY<moneyletter@uppity.co.kr>",
-            "Trip.com<kr_hotel@trip.com>"]
+            "delete":[{"id":"응암정보도서관<ealibsend@ealib.or.kr>"},{"id":"UPPITY<moneyletter@uppity.co.kr>"},
+            {"id":"Trip.com<kr_hotel@trip.com>"}]
         }}
     return msg
