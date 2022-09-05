@@ -124,7 +124,7 @@ async def create_session(response: Response):
 @router.post("/",response_model=responAna, status_code=200)
 async def access_mail(item: UserIn,response:Response):
 
-
+    print(item.socialId)
     #imap 서버 주소 설정.
     imap = imaplib.IMAP4_SSL(IMAPADDRESS[item.socialId])
     
