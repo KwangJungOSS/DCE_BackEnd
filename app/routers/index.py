@@ -1,6 +1,10 @@
-from curses import keyname
-from fastapi import APIRouter,Request,Form
+from fastapi import HTTPException,APIRouter,Request,Response,Depends
 from fastapi.responses import JSONResponse
+
+#const
+from common.consts import IMAPADDRESS
+
+#email
 import pandas as pd
 import imaplib
 from enum import Enum
@@ -11,6 +15,13 @@ from email import policy
 from pydantic import BaseModel, EmailStr
 from typing import Union,List,Optional
 
+#Session Backend
+from uuid import UUID,uuid4
+from fastapi_sessions.backends.implementations import InMemoryBackend
+from fastapi_sessions.session_verifier import SessionVerifier
+from fastapi_sessions.frontends.implementations import SessionCookie, CookieParameters
+
+
 router = APIRouter()
 
 # https://stackoverflow.com/questions/70302056/define-a-pydantic-nested-model <- 중첩된 json은 이런식으로 표현하래서 일케함.
@@ -18,6 +29,7 @@ router = APIRouter()
 class UserIn(BaseModel):
     inputId : str
     inputPassword : str
+    socialId: str
     # full_name : Union[str, None] = None
 
 class value(BaseModel):
@@ -36,10 +48,85 @@ class responAna(BaseModel):
     data: Optional[mailData]=None
 
 
+#session - 47 ~ 117 lines
+class SessionData(BaseModel):
+    platform : str
+    #userinfo :UserIn
+    
+cookie_params = CookieParameters()
+
+# Uses UUID
+cookie = SessionCookie(
+    cookie_name="cookie",
+    identifier="general_verifier",
+    auto_error=True,
+    secret_key="DONOTUSE",
+    cookie_params=cookie_params,
+)
+
+backend= InMemoryBackend[UUID,SessionData]()
+
+class BasicVerifier(SessionVerifier[UUID, SessionData]):
+    def __init__(
+        self,
+        *,
+        identifier: str,
+        auto_error: bool,
+        backend: InMemoryBackend[UUID, SessionData],
+        auth_http_exception: HTTPException,
+    ):
+        self._identifier = identifier
+        self._auto_error = auto_error
+        self._backend = backend
+        self._auth_http_exception = auth_http_exception
+
+    @property
+    def identifier(self):
+        return self._identifier
+
+    @property
+    def backend(self):
+        return self._backend
+
+    @property
+    def auto_error(self):
+        return self._auto_error
+
+    @property
+    def auth_http_exception(self):
+        return self._auth_http_exception
+
+    def verify_session(self, model: SessionData) -> bool:
+        """If the session exists, it is valid"""
+        return True
+
+
+verifier = BasicVerifier(
+    identifier="general_verifier",
+    auto_error=True,
+    backend=backend,
+    auth_http_exception=HTTPException(status_code=403, detail="invalid session"),
+)
+
+@router.get("/whoami", dependencies=[Depends(cookie)])
+async def whoami(session_data: SessionData = Depends(verifier)):
+    return session_data
+
+@router.get("/create")
+async def create_session(response: Response):
+    session = uuid4()
+    data = SessionData(platform="hello")
+    await backend.create(session, data)
+    cookie.attach_to_response(response, session)
+    return "created session for"
+
+
 @router.post("/",response_model=responAna, status_code=200)
-async def access_mail(request:Request, item: UserIn):
+async def access_mail(item: UserIn,response:Response):
+
+
     #imap 서버 주소 설정.
-    imap = imaplib.IMAP4_SSL("imap.naver.com")
+    imap = imaplib.IMAP4_SSL(IMAPADDRESS[item.socialId])
     
     #예외처리
     try:
@@ -51,6 +138,11 @@ async def access_mail(request:Request, item: UserIn):
         return JSONResponse(status_code=404, content={"message":"User ID or Password is invalid"})
 
    #로그인 성공 -> Session에 정보 저장
+    session=uuid4()
+    user_data = SessionData(userinfo=item,platform="naver")
+
+    await backend.create(session,user_data)
+    cookie.attach_to_response(response,session)
 
     #request.session["id"]=item.inputId     
     #print(request.session["id"])

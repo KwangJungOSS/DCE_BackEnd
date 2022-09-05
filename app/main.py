@@ -19,8 +19,8 @@ def create_app():
     CORSMiddleware,
     allow_origins=ORIGIN,
     allow_credentials=True,
-    allow_methods=['*'],
-    allow_headers=['*'],
+    allow_methods=["*"],
+    allow_headers=["*"],
     )
 
     #라우터 정의
