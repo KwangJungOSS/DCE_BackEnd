@@ -3,6 +3,9 @@ from fastapi.responses import JSONResponse
 
 #const
 from common.consts import IMAPADDRESS
+from models.mailAnalysis import UserIn,responAna
+
+import numpy as np
 
 #email
 import pandas as pd
@@ -15,6 +18,7 @@ from email import policy
 from pydantic import BaseModel, EmailStr
 from typing import Union,List,Optional
 
+
 #Session Backend
 from uuid import UUID,uuid4
 from fastapi_sessions.backends.implementations import InMemoryBackend
@@ -24,34 +28,10 @@ from fastapi_sessions.frontends.implementations import SessionCookie, CookiePara
 
 router = APIRouter()
 
-# https://stackoverflow.com/questions/70302056/define-a-pydantic-nested-model <- 중첩된 json은 이런식으로 표현하래서 일케함.
-
-class UserIn(BaseModel):
-    inputId : str
-    inputPassword : str
-    socialId: str
-    # full_name : Union[str, None] = None
-
-class value(BaseModel):
-    name:str
-    count:int
-
-class mailData(BaseModel):
-    sender: List[value]
-    ratio: List[value]
-    topic: List[value]
-    delete: List[str]    
-    # full_name : Union[str, None] = None
-
-#response analysis 줄임말.
-class responAna(BaseModel):
-    data: Optional[mailData]=None
-
-
 #session - 47 ~ 117 lines
 class SessionData(BaseModel):
+    userinfo :UserIn
     platform : str
-    #userinfo :UserIn
     
 cookie_params = CookieParameters()
 
@@ -110,7 +90,8 @@ verifier = BasicVerifier(
 
 @router.get("/whoami", dependencies=[Depends(cookie)])
 async def whoami(session_data: SessionData = Depends(verifier)):
-    return session_data
+    #session_data.platform
+    return session_data.platform
 
 @router.get("/create")
 async def create_session(response: Response):
@@ -120,10 +101,12 @@ async def create_session(response: Response):
     cookie.attach_to_response(response, session)
     return "created session for"
 
+@router.get("/")
+async def read_test():
+    return {"Hello":"World"}
 
 @router.post("/",response_model=responAna, status_code=200)
 async def access_mail(item: UserIn,response:Response):
-
 
     #imap 서버 주소 설정.
     imap = imaplib.IMAP4_SSL(IMAPADDRESS[item.socialId])
@@ -138,11 +121,6 @@ async def access_mail(item: UserIn,response:Response):
         return JSONResponse(status_code=404, content={"message":"User ID or Password is invalid"})
 
    #로그인 성공 -> Session에 정보 저장
-    session=uuid4()
-    user_data = SessionData(userinfo=item,platform="naver")
-
-    await backend.create(session,user_data)
-    cookie.attach_to_response(response,session)
 
     #request.session["id"]=item.inputId     
     #print(request.session["id"])
