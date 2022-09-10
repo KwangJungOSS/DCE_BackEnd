@@ -4,7 +4,6 @@ import imaplib
 import email
 from email.header import decode_header
 
-
 router = APIRouter(
     prefix="/mails",
     tags=["mails"]
