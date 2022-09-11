@@ -15,18 +15,18 @@ async def read_maildelete(mailAddress:str):
     username = ""
     password = ""
 
-    imap = imaplib.IMAP4_SSL("imap.naver.com")
+    imap = imaplib.IMAP4_SSL("imap.naver.com") # < 수정 필요 > IMAPADDRESS[item.socialId] - 이방법은 안 될 듯 : item은 안 받기 때문
     try:
         imap.login(username,password)
       #로그인 실패시,
     except imaplib.IMAP4.error as e:
         return JSONResponse(status_code=404, content={"message":"User ID or Password is invalid"})
 
-    delete_code= "FROM"+mailAddress
+    delete_code = "FROM"+mailAddress
 
     try:
         imap.select("INBOX")
-        status, messages = imap.search(None, "FROM<mangonie@naver.com>")
+        status, messages = imap.search(None, "FROM<mangonie@naver.com>") # < delete_code
         for mail_ID in messages:
             _, msg = imap.fetch(mail_ID, "(RFC822)")
             # you can delete the for loop for performance if you have a long list of emails
