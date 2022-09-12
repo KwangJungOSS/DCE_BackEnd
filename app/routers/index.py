@@ -35,30 +35,41 @@ async def access_mail(item: UserIn,response:Response):
     msg={"data":{
             #나에게 메일을 가장 많이 보내는 사람 Top5
             "sender": [
-                    {"name": "링커리어","count":600},
-                    {"name": "하나투어","count":400},
-                    {"name": "한국SW산업협회","count":380},
-                    {"name": "NEWNEEK","count":250},
-                    {"name": "순살브리핑","count":100}]
+                    {"name": "받은 메일 Top 1","count":600},
+                    {"name": "받은 메일 Top 2","count":400},
+                    {"name": "받은 메일 Top 3","count":380},
+                    {"name": "받은 메일 Top 4","count":250},
+                    {"name": "받은 메일 Top 5","count":100}]
             ,
             # 메일을 받는 비율 
             "ratio":  [
-                    {"name": "광고","count":100},
-                    {"name": "구독","count":600},
-                    {"name": "A","count":300},
-                    {"name": "B","count":250},
-                    {"name": "C","count":100}]
+                    {"name": "전체 메일 개수","count":500},
+                    {"name": "읽은 메일 개수","count":100},
+                    {"name": "안 읽은 메일 개수","count":400},
+                    {"name": "전체 읽은 메일 대비 안 읽은 메일","count":80.00}]
             ,
-            # WordCloud용 단어 최소 15개. 영어 5개, 한국어 10개
+            # WordCloud용 단어 15개. 영어 5개, 한국어 10개
             "topic":  [
-                    {"name": "취업","count":500},
-                    {"name": "개발","count":300},
-                    {"name": "웹툰","count":200},
-                    {"name": "광운대학교","count":119},
-                    {"name": "유튜브","count":50}]
+                    {"name": "한글 1","count":100},
+                    {"name": "한글 2","count":90},
+                    {"name": "한글 3","count":80},
+                    {"name": "한글 4","count":70},
+                    {"name": "한글 5","count":60},
+                    {"name": "한글 6","count":50},
+                    {"name": "한글 7","count":40},
+                    {"name": "한글 8","count":30},
+                    {"name": "한글 9","count":20},
+                    {"name": "한글 10","count":10},
+                    {"name": "english 1","count":50},
+                    {"name": "english 2","count":40},
+                    {"name": "english 3","count":30},
+                    {"name": "english 4","count":20},
+                    {"name": "english 5","count":10}]
             ,
-            #삭제 권장 메일 ( 여러개 갈 수도 있음.)
-            "delete":["응암정보도서관<ealibsend@ealib.or.kr>","UPPITY<moneyletter@uppity.co.kr>",
-            "Trip.com<kr_hotel@trip.com>"]
+            # 삭제 권장 메일 ( 10개 )
+            "delete":["응암정보도서관<ealibsend@ealib.or.kr>","홍익정보도서관<moneyletter@uppity.co.kr>",
+            "강남정보도서관<kr_hotel@trip.com>","석계정보도서관<ealibsend@ealib.or.kr>","태릉정보도서관<moneyletter@uppity.co.kr>",
+            "인천정보도서관<kr_hotel@trip.com>","광운정보도서관<ealibsend@ealib.or.kr>","고려정보도서관<moneyletter@uppity.co.kr>",
+            "노원정보도서관<kr_hotel@trip.com>","월계정보도서관<ealibsend@ealib.or.kr>"]
         }}
     return msg
