@@ -27,7 +27,7 @@ Text-mining을 통한 메일 분석!
   
   
 ## 시스템 구성 및 아키텍처
-![KakaoTalk_20220913_010116935](https://user-images.githubusercontent.com/71928522/189704098-7c3a8821-2975-46e3-89e0-0f5774715194.png)
+![image](https://user-images.githubusercontent.com/71928522/189708430-c80fc4c0-7318-4f8c-baf9-f3963c5e67c4.png)
 
 
 ## 환경 설정
