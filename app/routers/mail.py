@@ -50,4 +50,4 @@ async def read_maildelete(mailAddress:str):
     except imaplib.IMAP4.error as e:
         return JSONResponse(status_code=404, content={"message":"delete-falied"})
 
-    return 
+    return  
