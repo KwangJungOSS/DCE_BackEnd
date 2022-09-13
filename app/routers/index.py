@@ -50,26 +50,34 @@ async def access_mail(item: UserIn,response:Response):
             ,
             # WordCloud용 단어 15개. 영어 5개, 한국어 10개
             "topic":  [
-                    {"name": "한글 1","count":100},
-                    {"name": "한글 2","count":90},
-                    {"name": "한글 3","count":80},
-                    {"name": "한글 4","count":70},
-                    {"name": "한글 5","count":60},
-                    {"name": "한글 6","count":50},
-                    {"name": "한글 7","count":40},
-                    {"name": "한글 8","count":30},
-                    {"name": "한글 9","count":20},
-                    {"name": "한글 10","count":10},
-                    {"name": "english 1","count":50},
-                    {"name": "english 2","count":40},
-                    {"name": "english 3","count":30},
-                    {"name": "english 4","count":20},
-                    {"name": "english 5","count":10}]
+                    {"text": "한글 1","value":100},
+                    {"text": "한글 2","value":90},
+                    {"text": "한글 3","value":80},
+                    {"text": "한글 4","value":70},
+                    {"text": "한글 5","value":60},
+                    {"text": "한글 6","value":50},
+                    {"text": "한글 7","value":40},
+                    {"text": "한글 8","value":30},
+                    {"text": "한글 9","value":20},
+                    {"text": "한글 10","value":10},
+                    {"text": "english 1","value":50},
+                    {"text": "english 2","value":40},
+                    {"text": "english 3","value":30},
+                    {"text": "english 4","value":20},
+                    {"text": "english 5","value":10}]
             ,
             # 삭제 권장 메일 ( 10개 )
-            "delete":["응암정보도서관<ealibsend@ealib.or.kr>","홍익정보도서관<moneyletter@uppity.co.kr>",
-            "강남정보도서관<kr_hotel@trip.com>","석계정보도서관<ealibsend@ealib.or.kr>","태릉정보도서관<moneyletter@uppity.co.kr>",
-            "인천정보도서관<kr_hotel@trip.com>","광운정보도서관<ealibsend@ealib.or.kr>","고려정보도서관<moneyletter@uppity.co.kr>",
-            "노원정보도서관<kr_hotel@trip.com>","월계정보도서관<ealibsend@ealib.or.kr>"]
-        }}
+            "delete":[
+                {"name":"응암정보도서관","address":"<ealibsend@ealib.or.kr>"},
+                {"name":"홍익정보도서관","address":"<ealibsend@ealib.or.kr>"},
+                {"name":"석계정보도서관","address":"<ealibsend@ealib.or.kr>"},
+                {"name":"태릉정보도서관","address":"<ealibsend@ealib.or.kr>"},
+                {"name":"인천정보도서관","address":"<ealibsend@ealib.or.kr>"},
+                {"name":"광운정보도서관","address":"<ealibsend@ealib.or.kr>"},
+                {"name":"고려정보도서관","address":"<ealibsend@ealib.or.kr>"},
+                {"name":"노원정보도서관","address":"<ealibsend@ealib.or.kr>"},
+                {"name":"월계정보도서관","address":"<ealibsend@ealib.or.kr>"},
+                {"name":"녹번정보도서관","address":"<ealibsend@ealib.or.kr>"}]
+            }
+        }
     return msg
