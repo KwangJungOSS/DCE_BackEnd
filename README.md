@@ -4,8 +4,7 @@ DCE를 통해 나의 메일을 분석해보세요.
 내가 어떤 주제에 관심 있는지, 나를 귀찮게 하는 메일은 누구인지, 지워야할 메일은 누구인지 알 수 있어요!  
 디지털 탄소 배출 절감을 실천해보세요^^
 
-## 필수 설정
-IMAP을 사용해주세요!
+## 필수 설정 - IMAP을 사용해주세요!
 
 ### Naver 
 1.메일 왼쪽 아래의 환경설정 > POP3 / IMAP 설정 > IMAP / SMTP 설정 탭에서 IMAP/SMTP 사용 옵션을 사용함으로 설정  
@@ -25,7 +24,8 @@ Text-mining을 통한 메일 분석!
 + ~~
 + ~~
   
-  
+## 서비스 화면
+
 ## 시스템 구성 및 아키텍처
 ![image](https://user-images.githubusercontent.com/71928522/189708430-c80fc4c0-7318-4f8c-baf9-f3963c5e67c4.png)
 
@@ -47,3 +47,11 @@ pip install numpy
 pip install pandas
 ```
 
+## Team
+
+#### Data-Analysis
+> [김태영](https://github.com/kty4119)  
+> [오재호](https://github.com/roaker)
+#### Back-End & Front-End
+> [손재성](https://github.com/noseaj)  
+> [김민교](https://github.com/minkyokyo)
