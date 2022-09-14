@@ -17,9 +17,25 @@ from pandas import DataFrame
 
 # # 메인 함수
 
-def MygetAnalysisResult(imap):
+def MygetAnalysisResult():
 
-    concat_all_unseen = Calling_up_mail(imap)
+    platform = input("메일 플랫폼 : ")
+    user = input("아이디: ")
+    password = input("비밀번호: ")
+    
+    if platform == "naver":
+        imap = Naver_Login(user, password)
+        concat_all_unseen = Calling_up_mail(imap)
+        #Logout(imap)
+    elif platform == "google":
+        imap = Google_Login(user, password)
+        concat_all_unseen= Calling_up_mail(imap)
+        #Logout(imap)
+    elif platform == "daum":
+        imap = Daum_Login(user, password)
+        concat_all_unseen = Calling_up_mail(imap)
+        #Logout(imap)
+    #concat_all_unseen = Calling_up_mail(imap)
 
     analysis_list = Mail_Analysis(concat_all_unseen)
     Ko_LDA_word_list = Ko_Mail_LDA(concat_all_unseen)
@@ -37,7 +53,35 @@ def MygetAnalysisResult(imap):
     conclusion.append(Mail_Naive_Bayes_list)
 
     return conclusion
-    
+
+
+def Naver_Login(user, password):
+    imap = imaplib.IMAP4_SSL('imap.naver.com')
+    #user = "본인 아이디"
+    #password="본인 비밀번호"
+    imap.login(user,password)
+    return imap
+
+
+
+def Google_Login(user, password):
+    imap = imaplib.IMAP4_SSL('imap.gmail.com')
+    #user = "본인 메일@gmail.com"
+    #password="구글 2차 비밀번호" -> 따로 설정 필요 & 설명필요
+    imap.login(user,password)
+    return imap
+
+
+def Daum_Login(user, password):
+    imap = imaplib.IMAP4_SSL('imap.daum.net')
+    #user = "본인 메일주소"
+    #password="본인 비밀번호"
+    imap.login(user,password)
+    return imap
+
+
+# # 로그아웃
+
 # # 메일 불러오기 및 데이터 프레임 형성
 
 #get_key_from_mail과 세트입니다. 메일을 읽을 때 사용됩니다.
@@ -473,4 +517,6 @@ def Mail_Naive_Bayes(concat_all_unseen):
     
     return mail_result
 
+conclusion = MygetAnalysisResult()
+print(conclusion)
 
