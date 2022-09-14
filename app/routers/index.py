@@ -36,8 +36,8 @@ async def access_mail(item: UserIn,response:Response):
 
    #로그인 성공, 분석 시작
     aResult=ma.MygetAnalysisResult(imap)
-    convertToJson(aResult)
-
+    #convertToJson(aResult)
+    print(aResult)
 
     msg={"data":{
             #나에게 메일을 가장 많이 보내는 사람 Top5
