@@ -1,9 +1,13 @@
+from typing import OrderedDict
 from fastapi import APIRouter,Response,Depends
 from fastapi.responses import JSONResponse
 
 #const
 from common.consts import IMAPADDRESS
-from models.mailAnalysis import UserIn,responAna
+from common.convert import convertToJson
+from models.Mails import UserIn,responAna
+#analysis
+import analysis.my_mail_analysis as ma
 
 #email
 import imaplib
@@ -31,6 +35,9 @@ async def access_mail(item: UserIn,response:Response):
         return JSONResponse(status_code=404, content={"message":"User ID or Password is invalid"})
 
    #로그인 성공, 분석 시작
+    aResult=ma.MygetAnalysisResult(imap)
+    convertToJson(aResult)
+
 
     msg={"data":{
             #나에게 메일을 가장 많이 보내는 사람 Top5
