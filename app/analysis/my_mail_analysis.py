@@ -13,74 +13,41 @@ import numpy as np
 from nltk.corpus import stopwords
 from nltk.tokenize import punkt
 from pandas import DataFrame
+import ssl
 
 
 # # 메인 함수
 
-def MygetAnalysisResult():
-
-    platform = input("메일 플랫폼 : ")
-    user = input("아이디: ")
-    password = input("비밀번호: ")
+def MygetAnalysisResult2(imap):
+    concat_all_unseen = Calling_up_mail(imap)
     
-    if platform == "naver":
-        imap = Naver_Login(user, password)
-        concat_all_unseen = Calling_up_mail(imap)
-        #Logout(imap)
-    elif platform == "google":
-        imap = Google_Login(user, password)
-        concat_all_unseen= Calling_up_mail(imap)
-        #Logout(imap)
-    elif platform == "daum":
-        imap = Daum_Login(user, password)
-        concat_all_unseen = Calling_up_mail(imap)
-        #Logout(imap)
-    #concat_all_unseen = Calling_up_mail(imap)
-
     analysis_list = Mail_Analysis(concat_all_unseen)
     Ko_LDA_word_list = Ko_Mail_LDA(concat_all_unseen)
+
+    LDA_word_list = []
+    LDA_word_list.append(Ko_LDA_word_list)
+    
+    conclusion = []
+    conclusion.append(analysis_list)
+    conclusion.append(LDA_word_list)
+
+    return conclusion
+
+def MygetAnalysisResult1(imap):
+    concat_all_unseen = Calling_up_mail(imap)
     En_LDA_word_list = En_Mail_LDA(concat_all_unseen)
     Mail_Naive_Bayes_list = Mail_Naive_Bayes(concat_all_unseen)
 
     
     LDA_word_list = []
-    LDA_word_list.append(Ko_LDA_word_list)
     LDA_word_list.append(En_LDA_word_list)
     
     conclusion = []
-    conclusion.append(analysis_list)
     conclusion.append(LDA_word_list)
     conclusion.append(Mail_Naive_Bayes_list)
 
     return conclusion
 
-
-def Naver_Login(user, password):
-    imap = imaplib.IMAP4_SSL('imap.naver.com')
-    #user = "본인 아이디"
-    #password="본인 비밀번호"
-    imap.login(user,password)
-    return imap
-
-
-
-def Google_Login(user, password):
-    imap = imaplib.IMAP4_SSL('imap.gmail.com')
-    #user = "본인 메일@gmail.com"
-    #password="구글 2차 비밀번호" -> 따로 설정 필요 & 설명필요
-    imap.login(user,password)
-    return imap
-
-
-def Daum_Login(user, password):
-    imap = imaplib.IMAP4_SSL('imap.daum.net')
-    #user = "본인 메일주소"
-    #password="본인 비밀번호"
-    imap.login(user,password)
-    return imap
-
-
-# # 로그아웃
 
 # # 메일 불러오기 및 데이터 프레임 형성
 
@@ -220,15 +187,11 @@ def Mail_Analysis(concat_all_unseen):
     
     
     # 전체 메일 개수, 읽은 메일개수, 안읽은 메일 개수, 전체 메일 대비 안읽은 메일 개수
-    all_mail = len(concat_all_unseen)
     read_mail = len(concat_all_unseen.loc[concat_all_unseen['unseen 여부'] == 0])
     no_read_mail = len(concat_all_unseen.loc[concat_all_unseen['unseen 여부'] == 1])
-    no_read_mail_ratio = round(no_read_mail/all_mail,2)
     dict_mail_analysis = {
-        '전체 메일 개수' : all_mail,
         '읽은 메일 개수' : read_mail,
-        '안 읽은 메일 개수' : no_read_mail,
-        '전체 메일 대비 안읽은메일 비율' : no_read_mail_ratio
+        '안 읽은 메일 개수' : no_read_mail
     }
     
     analysis_list = []
@@ -338,7 +301,7 @@ def En_Mail_LDA(concat_all_unseen):
     # View
     
     # number of topics
-    num_topics = 5
+    num_topics = 10
     # Build LDA model
     lda_model = gensim.models.LdaMulticore(corpus=corpus,
                                            id2word=id2word,
@@ -353,7 +316,7 @@ def En_Mail_LDA(concat_all_unseen):
     
     word_list=[]
     return_list=[]
-    for i in range(5):
+    for i in range(10):
         a = topic_list[i][1]
         word = " ".join(re.findall("[a-zA-Z]+",a))
         word_list.append(word)
@@ -403,7 +366,7 @@ def Ko_Mail_LDA(concat_all_unseen):
     texts = data_word
     corpus=[id2word.doc2bow(text) for text in texts]
     
-    num_topics = 10
+    num_topics = 20
     chunksize = 2000
     passes = 20
     iterations = 400
@@ -427,7 +390,7 @@ def Ko_Mail_LDA(concat_all_unseen):
     
     word_list=[]
     return_list=[]
-    for i in range(10):
+    for i in range(20):
         a = topic_list[i][1]
         word = " ".join(re.findall("[ㄱ-ㅎㅏ-ㅣ가-힣]+",a))
         word_list.append(word)
@@ -517,6 +480,6 @@ def Mail_Naive_Bayes(concat_all_unseen):
     
     return mail_result
 
-conclusion = MygetAnalysisResult()
-print(conclusion)
+
+
 
