@@ -19,8 +19,8 @@ RDCE를 통해 나의 메일을 분석하고 디지털 탄소 배출 절감을 �
 ## 주요 기능
 ### 메일 분석
 Text-mining을 통한 메일 분석!  
-+-- Naive Bayes Classifier
-+-- Topic Modeling, LDA
++-- Naive Bayes Classifier  
++-- Topic Modeling, LDA  
   
 ## 서비스 화면
 
