@@ -2,7 +2,7 @@ import json
 from typing import OrderedDict
 
 
-def convertToJson(aResult):
+def convertToJson(aResult,bResult):
     
     json_data = OrderedDict()
     #sender
@@ -11,7 +11,7 @@ def convertToJson(aResult):
     for s_name,s_count in aResult[0][0].items():
         temp=OrderedDict()
         temp["name"]= s_name
-        temp["count"]=s_count
+        temp["count"]=int(s_count)
         sender_list.append(temp)
 
     #ratio
@@ -19,7 +19,7 @@ def convertToJson(aResult):
     for r_name,r_count in aResult[0][1].items():
         temp=OrderedDict()
         temp["name"]= r_name
-        temp["count"]=r_count
+        temp["count"]=int(r_count)
         ratio_list.append(temp)
 
     temp_value=100
@@ -28,21 +28,21 @@ def convertToJson(aResult):
     for t_name in aResult[1][0]:
         temp=OrderedDict()
         temp["text"]= t_name
-        temp["value"]=temp_value
-        temp_value=temp_value-10
+        temp["value"]=int(temp_value)
+        temp_value=temp_value-5
         topic_list.append(temp)
 
     #topic - english
-    for t_name in aResult[1][1]:
+    for t_name in bResult[0][0]:
         temp=OrderedDict()
         temp["text"]= t_name
-        temp["value"]=temp_value
+        temp["value"]=int(temp_value)
         temp_value=temp_value-10
         topic_list.append(temp)
 
     delete_list=[]
     #delete
-    for d_mails in aResult[2]:
+    for d_mails in bResult[1]:
         strings = d_mails.split('<')
         temp=OrderedDict()
         temp["name"]= strings[0]
@@ -54,4 +54,9 @@ def convertToJson(aResult):
     json_data["topic"]=topic_list
     json_data["delete"]=delete_list
 
-    print(json.dumps(json_data , ensure_ascii=False , indent='\t'))
+    json_data=json.dumps(json_data , ensure_ascii=False , indent='\t')
+    
+    # Convert json to dict
+    mail_dict = json.loads(json_data)
+
+    return mail_dict

@@ -1,3 +1,4 @@
+import ssl
 from typing import OrderedDict
 from fastapi import APIRouter,Response,Depends
 from fastapi.responses import JSONResponse
@@ -23,7 +24,9 @@ async def read_test():
 async def access_mail(item: UserIn,response:Response):
 
     #imap 서버 주소 설정.
-    imap = imaplib.IMAP4_SSL(IMAPADDRESS[item.socialId])
+    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    context.set_ciphers('DEFAULT@SECLEVEL=1')
+    imap = imaplib.IMAP4_SSL(IMAPADDRESS[item.socialId],ssl_context=context,port=993)
     
     #예외처리
     try:
@@ -35,11 +38,14 @@ async def access_mail(item: UserIn,response:Response):
         return JSONResponse(status_code=404, content={"message":"User ID or Password is invalid"})
 
    #로그인 성공, 분석 시작
-    aResult=ma.MygetAnalysisResult(imap)
-    #convertToJson(aResult)
-    print(aResult)
+    aResult_SRK=ma.MygetAnalysisResult2(imap)
+    aResult_ED=ma.MygetAnalysisResult1(imap)
+    finalMail=convertToJson(aResult_SRK,aResult_ED)
 
-    msg={"data":{
+
+    msg={"data":finalMail}
+    '''
+    {
             #나에게 메일을 가장 많이 보내는 사람 Top5
             "sender": [
                     {"name": "받은 메일 Top 1","count":600},
@@ -87,4 +93,5 @@ async def access_mail(item: UserIn,response:Response):
                 {"name":"녹번정보도서관","address":"<ealibsend@ealib.or.kr>"}]
             }
         }
+        '''
     return msg
