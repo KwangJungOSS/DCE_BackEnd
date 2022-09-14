@@ -3,3 +3,8 @@ uvicorn
 fastapi-sessions
 numpy
 pandas
+nltk
+gensim
+sklearn
+konlpy
+openpyxl
