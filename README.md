@@ -41,6 +41,8 @@ Text-mining을 통해 메일을 분석해요!
 ### Back-End & Front-End
 ![image](https://user-images.githubusercontent.com/71928522/189708430-c80fc4c0-7318-4f8c-baf9-f3963c5e67c4.png)
 
+(aws는 현재 도메인 문제로 닫아놓았습니다! 추후에 오픈하겠습니다. )
+
 ### Data-Analysis
 
 ### 데이터 전처리
