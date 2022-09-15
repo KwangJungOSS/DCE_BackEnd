@@ -8,7 +8,7 @@ RDCE를 통해 내가 어떤 주제에 관심 있는지, 나를 귀찮게 하는
 ## 필수 설정 - IMAP을 사용해주세요!
 
 ### Naver 
-메일 왼쪽 아래의 환경설정 > POP3 / IMAP 설정 > IMAP / SMTP 설정 탭에서 IMAP/SMTP 사용 옵션을 사용함으로 설정, IMAP 동기화 설정 제한 5,000통으로 설정   
+메일 왼쪽 아래의 환경설정 > POP3 / IMAP 설정 > IMAP / SMTP 설정 탭에서 IMAP/SMTP 사용 옵션을 사용함으로 설정 
 ![image](https://user-images.githubusercontent.com/71928522/189707903-733f1250-fde3-420f-816d-9a567a146250.png)
 
 ### Google (Gmail)
