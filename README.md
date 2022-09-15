@@ -28,6 +28,14 @@ Text-mining을 통해 메일을 분석해요!
 (10월 중 개발 예정)
   
 ## 서비스 화면
+### 메인화면
+![image](https://user-images.githubusercontent.com/71928522/190339721-c635c2aa-d5fa-4f29-9d0a-79b3b7ed2389.png)  
+  
+### 메일 분석화면
+![image](https://user-images.githubusercontent.com/71928522/190339769-58c62810-a669-4b4a-a4d3-3507f7189c66.png)
+
+
+
 
 ## 시스템 구성 및 아키텍처
 ### Back-End & Front-End
