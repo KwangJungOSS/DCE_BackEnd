@@ -22,7 +22,7 @@ def convertToJson(aResult,bResult):
         temp["count"]=int(r_count)
         ratio_list.append(temp)
 
-    temp_value=100
+    temp_value=500
     #topic - korean
     topic_list=[]
     for t_name in aResult[1][0]:
@@ -37,7 +37,7 @@ def convertToJson(aResult,bResult):
         temp=OrderedDict()
         temp["text"]= t_name
         temp["value"]=int(temp_value)
-        temp_value=temp_value-10
+        temp_value=temp_value-5
         topic_list.append(temp)
 
     delete_list=[]
@@ -55,8 +55,7 @@ def convertToJson(aResult,bResult):
     json_data["delete"]=delete_list
 
     json_data=json.dumps(json_data , ensure_ascii=False , indent='\t')
-    
+ 
     # Convert json to dict
     mail_dict = json.loads(json_data)
-
     return mail_dict

@@ -40,10 +40,12 @@ async def access_mail(item: UserIn,response:Response):
    #로그인 성공, 분석 시작
     aResult_SRK=ma.MygetAnalysisResult2(imap)
     aResult_ED=ma.MygetAnalysisResult1(imap)
+
     finalMail=convertToJson(aResult_SRK,aResult_ED)
 
 
     msg={"data":finalMail}
+   
     '''
     {
             #나에게 메일을 가장 많이 보내는 사람 Top5
